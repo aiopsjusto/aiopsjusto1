@@ -1,4 +1,4 @@
-            - name: AWS ECR Images Deploy
+name: AWS ECR Images Deploy
   # You may pin to the exact commit or the version.
   # uses: nyakaz73/aws-ecr-deploy@0a097cb8720ef37319a3dd59339e795ec857eed4
   uses: nyakaz73/aws-ecr-deploy@v0.14
