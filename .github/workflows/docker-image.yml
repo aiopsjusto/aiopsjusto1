@@ -1,0 +1,32 @@
+            - name: AWS ECR Images Deploy
+  # You may pin to the exact commit or the version.
+  # uses: nyakaz73/aws-ecr-deploy@0a097cb8720ef37319a3dd59339e795ec857eed4
+  uses: nyakaz73/aws-ecr-deploy@v0.14
+  with:
+    # AWS access key id
+    access_key_id: AKIA2AUOOS6XSQIQEFPU
+    # AWS secret acess key
+    secret_access_key: 7k1OTWYoQHqxA7dxxbkfFpa7479WGzT/C7dQYL8T
+    # AWS Region whose servers you want to send your requests to by default. Region close to you
+    region: eu-north-1
+    # AWS account id
+    aws_account_id: 688567261103
+    # AWS ECR Repository name
+    repo_name: aiops/main.py # optional
+    # Scan image on pushing to ECR
+    scan_on_push: # optional, default is true
+    # Docker image name
+    image_name: main.py
+    # Build from docker compose file
+    use_compose: false # optional
+    # Path to Dockerfile or docker-compose file
+    docker_path: ./Dockerfile # optional, default is ./
+    # AWS ECR Repository URI
+    repo_uri: 688567261103.dkr.ecr.eu-north-1.amazonaws.com/aiops/main.py # optional
+    # AWS ECR Repository Image tag name
+    tag_name: # optional, default is latest
+    # Force push to AWS ECR if there are conflicts or git fast forwards issues
+    force_push: true # optional
+    # The directory for the commands to execute in
+    working-directory: # optional, default is ./
+          
