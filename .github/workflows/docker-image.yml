@@ -1,49 +1,13 @@
-name: AWS ECR Images Deploy
+- name: Login to Amazon ECR
+  id: login-ecr
+  uses: aws-actions/amazon-ecr-login@v2
 
-on:
-  push:
-    branches:
-      - main
+- name: Build, tag, and push Docker image to Amazon ECR
+  run: |
+    # Set environment variables
+    REGISTRY=688567261103.dkr.ecr.eu-north-1.amazonaws.com
+    REPOSITORY=aiops
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Log in to AWS ECR
-      uses: aws-actions/amazon-ecr-login@v1
-      region: eu-north-1
-
-    - name: Build and push Docker image to ECR
-      uses: nyakaz73/aws-ecr-deploy@v0.14
-      with:
-        # AWS access key id, stored securely as GitHub secrets
-        access_key_id: AKIA2AUOOS6XSQIQEFPU
-        # AWS secret access key, stored securely as GitHub secrets
-        secret_access_key: 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
-        # AWS Region
-        region: eu-north-1
-        # AWS account id
-        aws_account_id: 688567261103
-        # AWS ECR Repository name
-        repo_name: aiops # Just specify the repo name (not the full path or file)
-        # Scan image on push (optional, default is true)
-        scan_on_push: true
-        # Docker image name
-        image_name: main
-        # Force push to AWS ECR if there are conflicts or git fast forwards issues
-        force_push: true
-        # Path to Dockerfile (verify if it's correct)
-        docker_path: ./Dockerfile
-        # AWS ECR Repository URI (optional, can be omitted if using repo_name)
-        repo_uri: 688567261103.dkr.ecr.eu-north-1.amazonaws.com/aiops
-        # AWS ECR Repository Image tag name (optional, default is "latest")
-        tag_name: latest
-        # Directory for the commands to execute in (optional, default is ./)
-        working-directory: .
+    # Build and push the Docker image
+    docker build -t aiops/main.py:latest .
+    docker push aiops/main.py:latest
