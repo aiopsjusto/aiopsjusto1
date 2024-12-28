@@ -1,4 +1,4 @@
-name: Docker Image Build and Deploy to ECR
+name: Build and Push Docker Image
 
 on:
   push:
@@ -6,23 +6,28 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
-      with:
-        region: eu-north-1 # Specify the AWS region here
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Build, tag, and push Docker image to Amazon ECR
-      run: |
-        # Set environment variables
-        REGISTRY=688567261103.dkr.ecr.eu-north-1.amazonaws.com
-        REPOSITORY=aiops
-        IMAGE_TAG=latest
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: AKIA2AUOOS6XSQIQEFPU
+          aws-secret-access-key: 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
+          aws-region: eu-north-1
 
-        # Build and push the Docker image
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and tag Docker image
+        run: |
+          docker build -t main.py:latest .
+          docker tag main.py:latest 688567261103.dkr.ecr.eu-north-1.amazonaws.com/aiops/main.py:latest
+
+      - name: Push Docker image to Amazon ECR
+        run: |
+          docker push 688567261103.dkr.ecr.eu-north-1.amazonaws.com/aiops/main.py:latest
