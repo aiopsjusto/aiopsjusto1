@@ -1,13 +1,26 @@
-- name: Login to Amazon ECR
-  id: login-ecr
-  uses: aws-actions/amazon-ecr-login@v2
+name: Docker Image Build and Deploy to ECR
 
-- name: Build, tag, and push Docker image to Amazon ECR
-  run: |
-    # Set environment variables
-    REGISTRY=688567261103.dkr.ecr.eu-north-1.amazonaws.com
-    REPOSITORY=aiops
+on:
+  push:
+    branches:
+      - main
 
-    # Build and push the Docker image
-    docker build -t aiops/main.py:latest .
-    docker push aiops/main.py:latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push Docker image to Amazon ECR
+      run: |
+        # Set environment variables
+        REGISTRY=688567261103.dkr.ecr.eu-north-1.amazonaws.com
+        REPOSITORY=aiops
+        IMAGE_TAG=latest
+
+        # Build and push the Docker image
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
